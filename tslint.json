@@ -37,7 +37,8 @@
         "named": "never",
         "asyncArrow": "always"
       }
-    ]
+    ],
+    "no-console": false,
   },
   "rulesDirectory": []
 }

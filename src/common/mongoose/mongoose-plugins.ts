@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import moment = require("moment");
+import { ITimestampedDocument } from "./timestamped-document";
 
 export const timestampPlugin = (schema: Schema) => {
     schema.add({
@@ -9,7 +10,7 @@ export const timestampPlugin = (schema: Schema) => {
 
     schema.pre('save', function (next: CallableFunction) {
         const now = moment.utc().toDate();
-        const self = this as any;
+        const self = this as ITimestampedDocument;
         self.updatedAt = now;
 
         if (!self.createdAt) {

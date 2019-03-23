@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from './config/config.module';
 import { PlanningModule } from './planning/planning.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,8 +10,11 @@ import { MongooseConfigService } from './config/mongoose-config.service';
     ConfigModule,
     PlanningModule,
     MongooseModule.forRootAsync({ useClass: MongooseConfigService }),
+    GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
+      autoSchemaFile: 'schema.gql',
+    }),
   ],
-  controllers: [AppController],
   providers: [],
 })
 export class AppModule { }

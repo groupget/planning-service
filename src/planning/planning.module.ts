@@ -1,14 +1,26 @@
 import { Module } from '@nestjs/common';
-import { PlanningController } from './planning.controller';
-import { PlanningService } from './planning.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PlanningListSchema } from './schemas/list.schema';
+import { PlanningService } from './planning.service';
+import { List } from './models/list.model';
+import { Item } from './models/item.model';
+import { ListsService } from './lists/lists.service';
+import { ItemsService } from './items/items.service';
+import { ItemsResolver } from './items/items.resolver';
+import { ListsResolver } from './lists/lists.resolver';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'PlanningList', schema: PlanningListSchema }]),
+    MongooseModule.forFeature([
+      { name: List.modelName, schema: List.model.schema },
+      { name: Item.modelName, schema: Item.model.schema }
+    ]),
   ],
-  controllers: [PlanningController],
-  providers: [PlanningService],
+  providers: [
+    PlanningService,
+    ListsResolver,
+    ItemsResolver,
+    ItemsService,
+    ListsService,
+  ],
 })
 export class PlanningModule { }
