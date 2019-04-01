@@ -53,3 +53,9 @@ type Query {
   list(listId: String!): List!
   groupLists(groupId: String!): [List!]!
 }
+
+type Subscription {
+  itemAdded: Item!
+  itemToggled: Item!
+  itemRemoved: Item!
+}
