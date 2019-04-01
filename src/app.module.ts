@@ -15,6 +15,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
+      playground: true
     }),
   ],
   providers: [],
