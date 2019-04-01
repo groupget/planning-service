@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ModelType } from 'typegoose';
 import { Item } from '../models/item.model';
 import { NewItemInput } from '../dto/new-item.input';
-import { ProducerService } from 'src/notifications/producer/producer.service';
-import { NotificationEvent, NotificationEventType } from 'src/notifications/models';
+import { ProducerService } from '../../notifications/producer/producer.service';
+import { NotificationEventType } from '../../notifications/models';
 
 @Injectable()
 export class ItemsService {

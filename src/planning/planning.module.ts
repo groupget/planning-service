@@ -7,9 +7,8 @@ import { ListsService } from './lists/lists.service';
 import { ItemsService } from './items/items.service';
 import { ItemsResolver } from './items/items.resolver';
 import { ListsResolver } from './lists/lists.resolver';
-import { PubSub } from 'graphql-subscriptions';
 import { PubSubProvider } from './providers/pub-sub.provider';
-import { NotificationsModule } from 'src/notifications/notifications.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [

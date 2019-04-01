@@ -1,9 +1,8 @@
-// import { TimestampedModel, TimestampedDocument } from "src/common/mongoose/timestamped-document";
 import { prop, ModelType, plugin, Typegoose } from "typegoose";
-import { timestampPlugin } from "src/common/mongoose/mongoose-plugins";
+import { timestampPlugin } from "../../common/mongoose/mongoose-plugins";
 import { Field, ObjectType, ID } from 'type-graphql';
-import { ITimestamped } from "src/common/mongoose/timestamped-document";
-import { schemaOptions } from "src/common/mongoose/schema.options";
+import { ITimestamped } from "../../common/mongoose/timestamped-document";
+import { schemaOptions } from "../../common/mongoose/schema.options";
 
 export interface IItem extends ITimestamped {
     id: string;

@@ -1,13 +1,11 @@
-import { List, IList } from "../models/list.model";
+import { List } from "../models/list.model";
 import { Resolver, Query, Args, Mutation, Subscription } from "@nestjs/graphql";
-import { PlanningService } from "../planning.service";
-import { NewListInput } from "../dto/new-list.input";
 import { NewItemInput } from "../dto/new-item.input";
 import { Item } from "../models/item.model";
 import { ItemsService } from "./items.service";
 import { Inject } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
-import { PubSubToken } from "src/common/provide-tokens";
+import { PubSubToken } from "../../common/provide-tokens";
 
 @Resolver(of => List)
 export class ItemsResolver {
