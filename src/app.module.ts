@@ -16,7 +16,7 @@ import { NotificationsModule } from './notifications/notifications.module';
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
       playground: true,
-      debug: true
+      introspection: true
     }),
   ],
   providers: [],
