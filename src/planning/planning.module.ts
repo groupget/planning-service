@@ -7,9 +7,13 @@ import { ListsService } from './lists/lists.service';
 import { ItemsService } from './items/items.service';
 import { ItemsResolver } from './items/items.resolver';
 import { ListsResolver } from './lists/lists.resolver';
+import { PubSub } from 'graphql-subscriptions';
+import { PubSubProvider } from './providers/pub-sub.provider';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
+    NotificationsModule,
     MongooseModule.forFeature([
       { name: List.modelName, schema: List.model.schema },
       { name: Item.modelName, schema: Item.model.schema }
@@ -21,6 +25,7 @@ import { ListsResolver } from './lists/lists.resolver';
     ItemsResolver,
     ItemsService,
     ListsService,
+    PubSubProvider,
   ],
 })
 export class PlanningModule { }

@@ -3,11 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ModelType } from 'typegoose';
 import { Item } from '../models/item.model';
 import { NewItemInput } from '../dto/new-item.input';
+import { ProducerService } from 'src/notifications/producer/producer.service';
+import { NotificationEvent, NotificationEventType } from 'src/notifications/models';
 
 @Injectable()
 export class ItemsService {
 
-    constructor(@InjectModel(Item.modelName) private readonly itemModel: ModelType<Item>) { }
+    constructor(
+        @InjectModel(Item.modelName) private readonly itemModel: ModelType<Item>,
+        private readonly notifier: ProducerService) { }
 
     public async getItems(listId: string) {
         return await this.itemModel.find({ listId: listId }).exec();
@@ -15,7 +19,10 @@ export class ItemsService {
 
     public async addNewItem(listId: string, item: NewItemInput) {
         const itemModel = new this.itemModel(item);
-        return await itemModel.save();
+        const savedItem = await itemModel.save();
+        await this.notifyQueue("created", savedItem);
+
+        return savedItem;
     }
 
     public async toggleItem(itemId: string, isChecked: boolean) {
@@ -25,5 +32,13 @@ export class ItemsService {
 
     public async removeItem(itemId: string) {
         return await this.itemModel.findByIdAndDelete(itemId);
+    }
+
+    private async notifyQueue(action: NotificationEventType, message: Item) {
+        return await this.notifier.publish({
+            resourceType: "item",
+            type: action,
+            message: message
+        });
     }
 }
