@@ -1,7 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "moduleResolution": "node",
+  "lib": [
+    "dom"
+  ],
   "exclude": [
+    "dist",
     "node_modules",
     "test",
     "**/*spec.ts"
