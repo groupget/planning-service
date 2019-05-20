@@ -30,7 +30,7 @@ type List {
 type Mutation {
   addItem(newItemData: NewItemInput!, listId: String!): Item!
   toggleItem(isChecked: Boolean!, itemId: String!): Item!
-  removeItem(itemId: String!, listId: String!): Item!
+  removeItem(itemId: String!): Item!
   addList(newListData: NewListInput!): List!
   removeList(listId: String!): List!
 }
