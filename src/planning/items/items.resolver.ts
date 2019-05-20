@@ -7,7 +7,7 @@ import { Inject } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
 import { PubSubToken } from "../../common/provide-tokens";
 
-@Resolver(of => List)
+@Resolver(of => Item)
 export class ItemsResolver {
     constructor(
         private readonly itemsService: ItemsService,
@@ -35,7 +35,7 @@ export class ItemsResolver {
     }
 
     @Mutation(returns => Item)
-    async removeItem(@Args('listId') listId: string, @Args("itemId") itemId: string) {
+    async removeItem(@Args("itemId") itemId: string) {
         const item = await this.itemsService.removeItem(itemId);
         await this.pubSub.publish('itemRemoved', { itemRemoved: item });
         return item;

@@ -31,7 +31,13 @@ export class ItemsService {
     }
 
     public async removeItem(itemId: string) {
-        return await this.itemModel.findByIdAndDelete(itemId);
+        const result = await this.itemModel.findByIdAndDelete(itemId);
+        
+        if (result !== null) {
+            await this.notifyQueue("deleted", result);
+        }
+        
+        return result;
     }
 
     private async notifyQueue(action: NotificationEventType, message: Item) {
