@@ -5,6 +5,7 @@ import { List } from '../models/list.model';
 import { NewListInput } from '../dto/new-list.input';
 import { ProducerService } from '../../../dist/notifications/producer/producer.service';
 import { NotificationEventType } from '../../../dist/notifications/models';
+import { UpdateListInput } from '../dto/update-list.input';
 
 @Injectable()
 export class ListsService {
@@ -30,6 +31,21 @@ export class ListsService {
         const model = new this.listModel(listDto);
         const savedList = await model.save();
         await this.notifyQueue("created", savedList);
+        return savedList;
+    }
+
+    public async updateList(updatedList: UpdateListInput) {
+        const list = await this.listModel.findById(updatedList.id);
+
+        if (updatedList.title) {
+            list.title = updatedList.title;
+        }
+
+        if (updatedList.description) {
+            list.description = updatedList.description;
+        }
+        const savedList = await list.save();
+        await this.notifyQueue("updated", savedList);
         return savedList;
     }
 
