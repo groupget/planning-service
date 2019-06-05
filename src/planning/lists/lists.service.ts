@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ModelType } from 'typegoose';
 import { List } from '../models/list.model';
 import { NewListInput } from '../dto/new-list.input';
-import { ProducerService } from '../../../dist/notifications/producer/producer.service';
-import { NotificationEventType } from '../../../dist/notifications/models';
 import { UpdateListInput } from '../dto/update-list.input';
+import { ProducerService } from '../../notifications/producer/producer.service';
+import { NotificationEventType } from '../../notifications/models';
 
 @Injectable()
 export class ListsService {

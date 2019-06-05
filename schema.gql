@@ -32,6 +32,7 @@ type Mutation {
   toggleItem(isChecked: Boolean!, itemId: String!): Item!
   removeItem(itemId: String!): Item!
   addList(newListData: NewListInput!): List!
+  updateList(updatedList: UpdateListInput!): List!
   removeList(listId: String!): List!
 }
 
@@ -58,4 +59,13 @@ type Subscription {
   itemAdded: Item!
   itemToggled: Item!
   itemRemoved: Item!
+  listAdded: List!
+  listUpdated: List!
+  listRemoved: List!
+}
+
+input UpdateListInput {
+  id: ID!
+  title: String
+  description: String
 }

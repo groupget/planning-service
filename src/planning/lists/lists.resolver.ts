@@ -4,8 +4,8 @@ import { NewListInput } from "../dto/new-list.input";
 import { ListsService } from "./lists.service";
 import { NotFoundException, Inject } from "@nestjs/common";
 import { UpdateListInput } from "../dto/update-list.input";
-import { PubSubToken } from "../../../dist/common/provide-tokens";
 import { PubSub } from "graphql-subscriptions";
+import { PubSubToken } from "../../common/provide-tokens";
 
 @Resolver(of => List)
 export class ListsResolver {
