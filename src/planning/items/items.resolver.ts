@@ -6,6 +6,7 @@ import { ItemsService } from "./items.service";
 import { Inject } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
 import { PubSubToken } from "../../common/provide-tokens";
+import { IUserInfo, UserInfo } from "../../common/decorators/user-decorator";
 
 @Resolver(of => Item)
 export class ItemsResolver {
@@ -20,8 +21,8 @@ export class ItemsResolver {
     }
 
     @Mutation(returns => Item)
-    async addItem(@Args('listId') listId: string, @Args("newItemData") inputItem: NewItemInput) {
-        const item = await this.itemsService.addNewItem(listId, inputItem);
+    async addItem(@UserInfo() user: IUserInfo, @Args("newItemData") inputItem: NewItemInput) {
+        const item = await this.itemsService.addNewItem(inputItem, user);
         await this.pubSub.publish('itemAdded', { itemAdded: item });
 
         return item;
@@ -35,8 +36,8 @@ export class ItemsResolver {
     }
 
     @Mutation(returns => Item)
-    async removeItem(@Args("itemId") itemId: string) {
-        const item = await this.itemsService.removeItem(itemId);
+    async removeItem(@UserInfo() user: IUserInfo, @Args("itemId") itemId: string) {
+        const item = await this.itemsService.removeItem(itemId, user);
         await this.pubSub.publish('itemRemoved', { itemRemoved: item });
         return item;
     }

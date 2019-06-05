@@ -6,6 +6,7 @@ import { NotFoundException, Inject } from "@nestjs/common";
 import { UpdateListInput } from "../dto/update-list.input";
 import { PubSub } from "graphql-subscriptions";
 import { PubSubToken } from "../../common/provide-tokens";
+import { UserInfo, IUserInfo } from "../../common/decorators/user-decorator";
 
 @Resolver(of => List)
 export class ListsResolver {
@@ -30,32 +31,32 @@ export class ListsResolver {
     }
 
     @Mutation(returns => List)
-    async addList(@Args('newListData') newListData: NewListInput) {
-        const list = await this.listsService.createList(newListData);
-        
+    async addList(@UserInfo() user: IUserInfo, @Args('newListData') newListData: NewListInput) {
+        const list = await this.listsService.createList(newListData, user);
+
         await this.pubSub.publish('listAdded', { listAdded: list });
-        
+
         return list;
     }
 
     @Mutation(returns => List)
-    async updateList(@Args('updatedList') updatedList: UpdateListInput) {
-        const list = await this.listsService.updateList(updatedList);
-        
+    async updateList(@UserInfo() user: IUserInfo, @Args('updatedList') updatedList: UpdateListInput) {
+        const list = await this.listsService.updateList(updatedList, user);
+
         await this.pubSub.publish('listUpdated', { listUpdated: list });
-        
+
         return list;
     }
 
     @Mutation(returns => List)
-    async removeList(@Args('listId') listId: string) {
-        const list = await this.listsService.removeList(listId);
+    async removeList(@UserInfo() user: IUserInfo, @Args('listId') listId: string) {
+        const list = await this.listsService.removeList(listId, user);
         if (!list) {
             throw new NotFoundException();
         }
-        
+
         await this.pubSub.publish('listDeleted', { listDeleted: list });
-        
+
         return list;
     }
 

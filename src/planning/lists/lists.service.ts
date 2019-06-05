@@ -6,6 +6,7 @@ import { NewListInput } from '../dto/new-list.input';
 import { UpdateListInput } from '../dto/update-list.input';
 import { ProducerService } from '../../notifications/producer/producer.service';
 import { NotificationEventType } from '../../notifications/models';
+import { IUserInfo, UserInfo } from '../../common/decorators/user-decorator';
 
 @Injectable()
 export class ListsService {
@@ -27,14 +28,14 @@ export class ListsService {
         return await this.listModel.find({ groupId }).exec();
     }
 
-    public async createList(listDto: NewListInput) {
+    public async createList(listDto: NewListInput, user?: IUserInfo) {
         const model = new this.listModel(listDto);
         const savedList = await model.save();
-        await this.notifyQueue("created", savedList);
+        await this.notifyQueue("created", savedList, user);
         return savedList;
     }
 
-    public async updateList(updatedList: UpdateListInput) {
+    public async updateList(updatedList: UpdateListInput, user?: IUserInfo) {
         const list = await this.listModel.findById(updatedList.id);
 
         if (updatedList.title) {
@@ -45,25 +46,26 @@ export class ListsService {
             list.description = updatedList.description;
         }
         const savedList = await list.save();
-        await this.notifyQueue("updated", savedList);
+        await this.notifyQueue("updated", savedList, user);
         return savedList;
     }
 
-    public async removeList(id: string) {
+    public async removeList(id: string, user?: IUserInfo) {
         const result = await this.listModel.findByIdAndDelete(id);
 
         if (result !== null) {
-            await this.notifyQueue("deleted", result);
+            await this.notifyQueue("deleted", result, user);
         }
 
         return result;
     }
 
-    private async notifyQueue(action: NotificationEventType, message: List) {
+    private async notifyQueue(action: NotificationEventType, message: List, user: IUserInfo) {
         return await this.notifier.publish({
             resourceType: "list",
             type: action,
-            message: message
+            message: message,
+            userDetails: user
         });
     }
 }

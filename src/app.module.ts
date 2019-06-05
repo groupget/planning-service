@@ -13,6 +13,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     NotificationsModule,
     MongooseModule.forRootAsync({ useClass: MongooseConfigService }),
     GraphQLModule.forRoot({
+      context: ({ req }) => ({ headers: req.headers }),
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
       playground: true,

@@ -1,3 +1,5 @@
+import { IUserInfo } from "../common/decorators/user-decorator";
+
 export enum ExchangeType {
     Topic = "topic",
     Fanout = "fanout",
@@ -11,4 +13,5 @@ export class NotificationEvent {
     type: NotificationEventType;
     resourceType: NotificationEventResourceType;
     message: any;
+    userDetails: IUserInfo;
 }

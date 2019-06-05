@@ -28,7 +28,7 @@ type List {
 }
 
 type Mutation {
-  addItem(newItemData: NewItemInput!, listId: String!): Item!
+  addItem(newItemData: NewItemInput!): Item!
   toggleItem(isChecked: Boolean!, itemId: String!): Item!
   removeItem(itemId: String!): Item!
   addList(newListData: NewListInput!): List!

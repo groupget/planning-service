@@ -5,6 +5,7 @@ import { Item } from '../models/item.model';
 import { NewItemInput } from '../dto/new-item.input';
 import { ProducerService } from '../../notifications/producer/producer.service';
 import { NotificationEventType } from '../../notifications/models';
+import { IUserInfo } from '../../common/decorators/user-decorator';
 
 @Injectable()
 export class ItemsService {
@@ -17,10 +18,10 @@ export class ItemsService {
         return await this.itemModel.find({ listId: listId }).exec();
     }
 
-    public async addNewItem(listId: string, item: NewItemInput) {
+    public async addNewItem(item: NewItemInput, user?: IUserInfo) {
         const itemModel = new this.itemModel(item);
         const savedItem = await itemModel.save();
-        await this.notifyQueue("created", savedItem);
+        await this.notifyQueue("created", savedItem, user);
 
         return savedItem;
     }
@@ -30,21 +31,22 @@ export class ItemsService {
         return await this.itemModel.findByIdAndUpdate(itemId, { $set: { isChecked: isChecked } }, returnUpdatedObject);
     }
 
-    public async removeItem(itemId: string) {
+    public async removeItem(itemId: string, user?: IUserInfo) {
         const result = await this.itemModel.findByIdAndDelete(itemId);
-        
+
         if (result !== null) {
-            await this.notifyQueue("deleted", result);
+            await this.notifyQueue("deleted", result, user);
         }
-        
+
         return result;
     }
 
-    private async notifyQueue(action: NotificationEventType, message: Item) {
+    private async notifyQueue(action: NotificationEventType, message: Item, user: IUserInfo) {
         return await this.notifier.publish({
             resourceType: "item",
             type: action,
-            message: message
+            message: message,
+            userDetails: user
         });
     }
 }
